@@ -5,7 +5,7 @@
 #ifndef VolvoDIM_h
 #define VolvoDIM_h
 
-#include <mcp_can_dfs.h>
+#include "mcp2515_can.h"
 #include <mcp_can.h>
 #include <SPI.h>
 #include <math.h>
@@ -31,6 +31,7 @@ class VolvoDIM
         void simulate();
         void powerOff();
         void powerOn();
+        void gaugeReset();
 
     private:
         void sendMsgWrapper(unsigned long wId, int wExt, int wLen ,unsigned char* wBuf);

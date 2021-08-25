@@ -7,11 +7,11 @@
 #endif
 
 
-MCP_CAN CAN;
+mcp2515_can CAN(0);
 int _relayPin = 0;
 VolvoDIM::VolvoDIM(int SPI_CS_PIN, int relayPin)
 {
-    MCP_CAN temp_CAN(SPI_CS_PIN);
+    mcp2515_can temp_CAN(SPI_CS_PIN);
     CAN = temp_CAN;
     _relayPin = relayPin; 
 }
@@ -42,7 +42,7 @@ unsigned long addrLi[10] = {0x217FFC, 0x2803008, 0x3C01428, 0x381526C, 0x3600008
 unsigned char defaultData[10][8] = {
   {0x01, 0x4B, 0x00, 0xD8, 0xF0, 0x58, 0x00, 0x00}, //0, Speed/KeepAlive , 0x217FFC
   {0xFF, 0xE1, 0xFF, 0xF0, 0xFF, 0xCF, 0x00, 0x00}, //1, RPM/Backlights , 0x2803008
-  {0xC0, 0x80, 0x51, 0x89, 0x0D, 0xD4, 0x00, 0x00}, //2, Coolant/OutdoorTemp , 0x3C01428
+  {0xC0, 0x80, 0x51, 0x89, 0x0E, 0x00, 0x00, 0x00}, //2, Coolant/OutdoorTemp , 0x3C01428
   {0x00, 0x01, 0x05, 0xBC, 0x05, 0xA0, 0x40, 0x40}, //3, Time/GasTank , 0x381526C
   {0x00, 0x00, 0xB0, 0x60, 0x30, 0x00, 0x00, 0x00}, //4, Brake system Keep alive , 0x3600008
   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, //5, Blinker , 0xA10408
@@ -269,7 +269,7 @@ void VolvoDIM::powerOff(){
 }
 void VolvoDIM::init()
 {
-    while (CAN_OK != CAN.begin(CAN_125KBPS))
+    while (CAN_OK != CAN.begin(CAN_125KBPS, MCP_16MHz))
     {
         delay(100);
     }
@@ -539,4 +539,9 @@ void VolvoDIM::setRightBlinker(bool state)
         defaultData[5][7] = 0x0;
     }
     rightBlinker = state;
+}
+void VolvoDIM::gaugeReset(){
+    powerOn();
+    delay(7000);
+    powerOff();
 }
