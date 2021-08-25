@@ -38,7 +38,6 @@ unsigned long addrLi[10] = {0x217FFC, 0x2803008, 0x3C01428, 0x381526C, 0x3600008
    addrLi[9] = Car Config
 */
 
-//Refer to Excel Sheets for info about data values.
 unsigned char defaultData[10][8] = {
   {0x01, 0x4B, 0x00, 0xD8, 0xF0, 0x58, 0x00, 0x00}, //0, Speed/KeepAlive , 0x217FFC
   {0xFF, 0xE1, 0xFF, 0xF0, 0xFF, 0xCF, 0x00, 0x00}, //1, RPM/Backlights , 0x2803008
@@ -485,6 +484,9 @@ void VolvoDIM::setOverheadBrightness(int value)
 {
     if (value >= 0 && value <= 256)
     {
+        if(value == 256){
+            value = 255;
+        }
         defaultData[1][2] = value;
     }
     else
@@ -496,6 +498,9 @@ void VolvoDIM::setLcdBrightness(int value)
 {
     if (value >= 0 && value <= 256)
     {
+        if(value == 256){
+            value = 255;
+        }
         defaultData[1][4] = round(value / 32);
     }
     else
@@ -507,6 +512,9 @@ void VolvoDIM::setTotalBrightness(int value)
 {
     if (value >= 0 && value <= 256)
     {
+        if(value == 256){
+            value = 255;
+        }
         setLcdBrightness(value);
         setOverheadBrightness(value);
     }

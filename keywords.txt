@@ -1,0 +1,35 @@
+==================================
+CLASS
+==================================
+VolvoDIM	KEYWORD1
+
+==================================
+FUNCTIONS
+==================================
+setTime	KEYWORD2
+clockToDecimal	KEYWORD2
+celsToFahr	KEYWORD2
+setOutdoorTemp	KEYWORD2
+setCoolantTemp	KEYWORD2
+setSpeed	KEYWORD2
+setGasLevel	KEYWORD2
+setRpm	KEYWORD2
+setOverheadBrightness	KEYWORD2
+setLcdBrightness	KEYWORD2
+setTotalBrightness	KEYWORD2
+setLeftBlinker	KEYWORD2
+setRightBlinker	KEYWORD2
+init	KEYWORD2
+simulate	KEYWORD2
+powerOff	KEYWORD2
+powerOn	KEYWORD2
+gaugeReset	KEYWORD2
+
+==================================
+CONSTANTS
+==================================
+VolvoDIM_h	LITERAL1
+
+==================================
+DATA TYPES
+==================================

@@ -1,0 +1,29 @@
+{
+    "name": "VolvoDIMLib",
+    "keywords": "volvo, dim, cluster",
+    "description": "Volvo DIM library to control volvo instrument clusters",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/andrewgabler/VolvoDIMLib.git"
+    },
+    "authors":
+    {
+        "name": "Andrew Gabler",
+        "email": "andy@agabler.com",
+        "maintainer": true
+    },
+    "liscense": "GPL-3.0-or-later",
+    "version": "1.0.1",
+    "frameworks": "arduino",
+    "platforms": "*",
+    "dependencies":
+    [
+        {
+            "owner":"seeed-studio",
+            "name":"CAN_BUS_Shield",
+            "version":"^2.3.0"
+        }
+    ]
+  }
+  

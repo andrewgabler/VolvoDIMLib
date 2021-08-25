@@ -13,7 +13,7 @@
 class VolvoDIM
 {
     public:
-        VolvoDIM(int SPI_CS_PIN, int relayPin);
+        VolvoDIM(int SPI_CS_PIN, int relayPin=0);
         void setTime(int inputTime);
         int clockToDecimal(int hour, int minute, int AM); 
         double celsToFahr(double temp);
