@@ -24,6 +24,9 @@ simulate	KEYWORD2
 powerOff	KEYWORD2
 powerOn	KEYWORD2
 gaugeReset	KEYWORD2
+sweepGauges KEYWORD2
+enableSerialErrorMessages KEYWORD2
+disableSerialErrorMessages KEYWORD2
 
 ==================================
 CONSTANTS

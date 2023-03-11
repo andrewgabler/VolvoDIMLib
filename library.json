@@ -10,11 +10,11 @@
     "authors":
     {
         "name": "Andrew Gabler",
-        "email": "andy@agabler.com",
+        "email": "contact@agabler.com",
         "maintainer": true
     },
     "liscense": "GPL-3.0-or-later",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "frameworks": "arduino",
     "platforms": "*",
     "dependencies":

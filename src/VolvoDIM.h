@@ -32,6 +32,9 @@ class VolvoDIM
         void powerOff();
         void powerOn();
         void gaugeReset();
+        void sweepGauges();
+        void enableSerialErrorMessages();
+        void disableSerialErrorMessages();
 
     private:
         void sendMsgWrapper(unsigned long wId, int wExt, int wLen ,unsigned char* wBuf);

@@ -15,6 +15,7 @@ VolvoDIM::VolvoDIM(int SPI_CS_PIN, int relayPin)
     CAN = temp_CAN;
     _relayPin = relayPin; 
 }
+bool enableSerialErrMsg = false;
 int genCnt = 0;
 int cnt = 0;
 int listLen = 10;
@@ -355,7 +356,10 @@ void VolvoDIM::setTime(int inputTime)
     }
     else
     {
-        //SERIAL.println("Not a valid time");
+        if(enableSerialErrMsg){
+            SERIAL.println("Not a valid time");
+        }
+        
     }
 }
 int VolvoDIM::clockToDecimal(int hour, int minute, int AM)
@@ -377,7 +381,9 @@ int VolvoDIM::clockToDecimal(int hour, int minute, int AM)
     }
     else
     {
-        //SERIAL.println("Not a valid time");
+        if(enableSerialErrMsg){
+            SERIAL.println("Not a valid time");
+        }
         return 0;
     }
 }
@@ -407,7 +413,9 @@ void VolvoDIM::setOutdoorTemp(int oTemp)
     }
     else
     {
-        //SERIAL.println("Temp out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("Temp out of range");
+        }
     }
 }
 void VolvoDIM::setCoolantTemp(int range)
@@ -424,7 +432,9 @@ void VolvoDIM::setCoolantTemp(int range)
     }
     else
     {
-        //SERIAL.println("Value out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("Value out of range");
+        }
     }
 }
 void VolvoDIM::setSpeed(int carSpeed)
@@ -454,7 +464,9 @@ void VolvoDIM::setSpeed(int carSpeed)
     }
     else
     {
-        //SERIAL.println("Speed out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("Speed out of range");
+        }
     }
 }
 void VolvoDIM::setGasLevel(int level)
@@ -466,7 +478,9 @@ void VolvoDIM::setGasLevel(int level)
     }
     else
     {
-        //SERIAL.println("Gas level out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("Gas level out of range");
+        }
     }
 }
 void VolvoDIM::setRpm(int rpm)
@@ -477,7 +491,9 @@ void VolvoDIM::setRpm(int rpm)
     }
     else
     {
-        //SERIAL.println("RPM out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("RPM out of range");
+        }
     }
 }
 void VolvoDIM::setOverheadBrightness(int value)
@@ -491,7 +507,9 @@ void VolvoDIM::setOverheadBrightness(int value)
     }
     else
     {
-        //SERIAL.println("Value out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("Value out of range");
+        }
     }
 }
 void VolvoDIM::setLcdBrightness(int value)
@@ -505,7 +523,9 @@ void VolvoDIM::setLcdBrightness(int value)
     }
     else
     {
-        //SERIAL.println("Value out of range");
+        if(enableSerialErrMsg){
+            SERIAL.println("Value out of range");
+        }
     }
 }
 void VolvoDIM::setTotalBrightness(int value)
@@ -519,8 +539,10 @@ void VolvoDIM::setTotalBrightness(int value)
         setOverheadBrightness(value);
     }
     else
-    {
-        //SERIAL.println("Value out of range");
+    {   
+        if(enableSerialErrMsg){
+            SERIAL.println("Value out of range");
+        }
     }
 }
 void VolvoDIM::setLeftBlinker(bool state)
@@ -552,4 +574,17 @@ void VolvoDIM::gaugeReset(){
     powerOn();
     delay(7000);
     powerOff();
+}
+void VolvoDIM::sweepGauges(){
+    setRpm(8000);
+    setSpeed(160);
+    delay(600);
+    setRpm(0);
+    setSpeed(0);
+}
+void VolvoDIM::enableSerialErrorMessages(){
+    enableSerialErrMsg = true;
+}
+void VolvoDIM::disableSerialErrorMessages(){
+    enableSerialErrMsg = false;
 }
