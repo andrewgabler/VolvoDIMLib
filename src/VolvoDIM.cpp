@@ -22,7 +22,7 @@ int listLen = 10;
 int carConCnt = 0;
 int configCnt = 0;
 int blinkerInterval = 0;
-bool leftBlinker = false, rightBlinker = false;
+bool leftBlinker = false, rightBlinker = false, solidState = false;
 unsigned char stmp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long address;
 unsigned long addrLi[10] = {0x217FFC, 0x2803008, 0x3C01428, 0x381526C, 0x3600008, 0xA10408, 0x2006428, 0x1A0600A, 0x2616CFC, 0x1017FFC};
@@ -203,7 +203,7 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
     {
         blinkRatio = 50;
     }
-    if (isBlinking && (interval % blinkRatio == 0))
+    if (isBlinking && (interval % blinkRatio == 0) && !solidState)
     {
         int prevState = 0;
         if (leftBlinker && rightBlinker)
@@ -256,6 +256,23 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
                 sendMsgWrapper(address, 1, 8, stmp);
                 delay(15);
             }
+        }
+    }
+    else if (solidState)
+    {
+        if (leftBlinker)
+        {
+            defaultData[5][7] = 0x0A;
+            stmp[7] = defaultData[5][7];
+            CAN.sendMsgBuf(address, 1, 8, stmp);
+            delay(15);
+        }
+        if (rightBlinker)
+        {
+            defaultData[5][7] = 0x0C;
+            stmp[7] = defaultData[5][7];
+            CAN.sendMsgBuf(address, 1, 8, stmp);
+            delay(15);
         }
     }
 }
@@ -570,6 +587,16 @@ void VolvoDIM::setRightBlinker(bool state)
     }
     rightBlinker = state;
 }
+void VolvoDIM::setLeftBlinkerSolid(bool state)
+{
+    solidState = state;
+    leftBlinker = state;
+}
+void VolvoDIM::setRightBlinkerSolid(bool state)
+{
+    solidState = state;
+    rightBlinker = state;
+}
 void VolvoDIM::gaugeReset(){
     powerOn();
     delay(7000);
@@ -578,7 +605,7 @@ void VolvoDIM::gaugeReset(){
 void VolvoDIM::sweepGauges(){
     setRpm(8000);
     setSpeed(160);
-    delay(600);
+    delay(500);
     setRpm(0);
     setSpeed(0);
 }

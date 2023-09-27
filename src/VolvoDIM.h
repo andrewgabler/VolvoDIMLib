@@ -27,6 +27,8 @@ class VolvoDIM
         void setTotalBrightness(int value);
         void setLeftBlinker(bool state);
         void setRightBlinker(bool state);
+        void setLeftBlinkerSolid(bool state);
+        void setRightBlinkerSolid(bool state);
         void init();
         void simulate();
         void powerOff();

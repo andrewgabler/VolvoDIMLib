@@ -17,8 +17,10 @@ setRpm	KEYWORD2
 setOverheadBrightness	KEYWORD2
 setLcdBrightness	KEYWORD2
 setTotalBrightness	KEYWORD2
-setLeftBlinker	KEYWORD2
+setLeftBlinker  KEYWORD2
 setRightBlinker	KEYWORD2
+setLeftBlinkerSolid KEYWORD2
+setRightBlinkerSolid    KEYWORD2
 init	KEYWORD2
 simulate	KEYWORD2
 powerOff	KEYWORD2
