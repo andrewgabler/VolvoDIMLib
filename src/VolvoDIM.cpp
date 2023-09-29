@@ -592,15 +592,23 @@ void VolvoDIM::setRightBlinker(bool state)
     }
     rightBlinker = state;
 }
-void VolvoDIM::setLeftBlinkerSolid(bool state)
+void VolvoDIM::setLeftBlinkerSolid(int state)
 {
-    solidState = state;
-    leftBlinker = state;
+  var val = false;
+  if(state == 1){
+    val = true;
+  }
+    solidState = val;
+    leftBlinker = val;
 }
-void VolvoDIM::setRightBlinkerSolid(bool state)
+void VolvoDIM::setRightBlinkerSolid(int state)
 {
-    solidState = state;
-    rightBlinker = state;
+  var val = false;
+  if(state == 1){
+    val = true;
+  }
+    solidState = val;
+    rightBlinker = val;
 }
 
 void VolvoDIM::setGearPosText(const char* gear) {
