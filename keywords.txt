@@ -6,33 +6,33 @@ VolvoDIM	KEYWORD1
 ==================================
 FUNCTIONS
 ==================================
-setTime	KEYWORD2
+setTime  KEYWORD2
 clockToDecimal	KEYWORD2
 celsToFahr	KEYWORD2
 setOutdoorTemp	KEYWORD2
 setCoolantTemp	KEYWORD2
 setSpeed	KEYWORD2
-setGasLevel	KEYWORD2
+setGasLevel  KEYWORD2
 setRpm	KEYWORD2
-setOverheadBrightness	KEYWORD2
+setOverheadBrightness  KEYWORD2
 setLcdBrightness	KEYWORD2
 setTotalBrightness	KEYWORD2
 setLeftBlinker  KEYWORD2
-setRightBlinker	KEYWORD2
-setLeftBlinkerSolid KEYWORD2
+setRightBlinker  KEYWORD2
+setLeftBlinkerSolid  KEYWORD2
 setRightBlinkerSolid    KEYWORD2
-setGearPosText	KEYWORD2
+setGearPosText  KEYWORD2
 setGearPosInt    KEYWORD2
 enableTrailer   KEYWORD2
 setError	KEYWORD2
-engineServiceRequiredOrange	KEYWORD2
-reducedBrakePerformanceOrange	KEYWORD2
-fuelFillerCapLoose	KEYWORD2
-engineSystemServiceUrgentRed	KEYWORD2
+engineServiceRequiredOrange  KEYWORD2
+reducedBrakePerformanceOrange  KEYWORD2
+fuelFillerCapLoose  KEYWORD2
+engineSystemServiceUrgentRed  KEYWORD2
 brakePerformanceReducedRed	KEYWORD2
-reducedEnginePerformanceRed	KEYWORD2
-slowDownOrShiftUpOrange	KEYWORD2
-reducedEnginePerformanceOrange
+reducedEnginePerformanceRed  KEYWORD2
+slowDownOrShiftUpOrange  KEYWORD2
+reducedEnginePerformanceOrange  KEYWORD2
 init	KEYWORD2
 simulate	KEYWORD2
 powerOff	KEYWORD2
