@@ -271,6 +271,10 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
             stmp[7] = defaultData[arrBlinker][7];
             sendMsgWrapper(address, 1, 8, stmp);
             delay(15);
+        } else {
+          defaultData[arrBlinker][7] = (char)0x00;
+          stmp[7] = defaultData[arrBlinker][7];
+          sendMsgWrapper(address, 1, 8, stmp);
         }
         if (rightBlinker)
         {
@@ -278,6 +282,10 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
             stmp[7] = defaultData[arrBlinker][7];
             sendMsgWrapper(address, 1, 8, stmp);
             delay(15);
+        } else {
+          defaultData[arrBlinker][7] = (char)0x00;
+          stmp[7] = defaultData[arrBlinker][7];
+          sendMsgWrapper(address, 1, 8, stmp);
         }
     }
 }
@@ -598,6 +606,7 @@ void VolvoDIM::setLeftBlinkerSolid(int state)
   if(state == 1){
     val = true;
   }
+  
     solidState = val;
     leftBlinker = val;
 }
