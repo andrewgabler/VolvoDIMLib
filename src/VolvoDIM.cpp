@@ -594,7 +594,7 @@ void VolvoDIM::setRightBlinker(bool state)
 }
 void VolvoDIM::setLeftBlinkerSolid(int state)
 {
-  var val = false;
+  bool val = false;
   if(state == 1){
     val = true;
   }
@@ -603,7 +603,7 @@ void VolvoDIM::setLeftBlinkerSolid(int state)
 }
 void VolvoDIM::setRightBlinkerSolid(int state)
 {
-  var val = false;
+  bool val = false;
   if(state == 1){
     val = true;
   }
