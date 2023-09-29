@@ -32,6 +32,15 @@ class VolvoDIM
         void setGearPosText(const char* gear);
         void setGearPosInt(int gear);
         void enableTrailer(bool enabled);
+        void setError(int error);
+        void engineServiceRequiredOrange(int on);
+        void reducedBrakePerformanceOrange(int on);
+        void fuelFillerCapLoose(int on);
+        void engineSystemServiceUrgentRed(int on);
+        void brakePerformanceReducedRed(int on);
+        void reducedEnginePerformanceRed(int on);
+        void slowDownOrShiftUpOrange(int on);
+        void reducedEnginePerformanceOrange(int on);
         void init();
         void simulate();
         void powerOff();

@@ -21,9 +21,18 @@ setLeftBlinker  KEYWORD2
 setRightBlinker	KEYWORD2
 setLeftBlinkerSolid KEYWORD2
 setRightBlinkerSolid    KEYWORD2
-setGearPosText KEYWORD2
+setGearPosText	KEYWORD2
 setGearPosInt    KEYWORD2
 enableTrailer   KEYWORD2
+setError	KEYWORD2
+engineServiceRequiredOrange	KEYWORD2
+reducedBrakePerformanceOrange	KEYWORD2
+fuelFillerCapLoose	KEYWORD2
+engineSystemServiceUrgentRed	KEYWORD2
+brakePerformanceReducedRed	KEYWORD2
+reducedEnginePerformanceRed	KEYWORD2
+slowDownOrShiftUpOrange	KEYWORD2
+reducedEnginePerformanceOrange
 init	KEYWORD2
 simulate	KEYWORD2
 powerOff	KEYWORD2

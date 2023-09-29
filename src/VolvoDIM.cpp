@@ -520,15 +520,12 @@ void VolvoDIM::setRpm(int rpm)
 }
 void VolvoDIM::setOverheadBrightness(int value)
 {
-    if (value >= 0 && value <= 256)
+   if (value >= 0 && value <= 256)
     {
-        int val = 0x00;
-        if(value > 250){
-            val = 0x3f;
-        } else {
-            val = round(value / 32);
+        if(value == 256){
+            value = 255;
         }
-        defaultData[arrRpm][2] = val;
+        defaultData[arrRpm][2] = value;
     }
     else
     {
@@ -711,6 +708,115 @@ void VolvoDIM::enableTrailer(bool enabled){
       defaultData[arrTrailer][5] = (char)0xE0;
     }
 }
+
+void VolvoDIM::setError(int error) {
+    if (error == 1) {
+        //Engine system service required orange light
+        defaultData[arrGear][3] = (char)0x10;
+    }
+    else if (error == 2) {
+        //reduced brake performance orange light
+        defaultData[arrGear][3] = (char)0x30;
+    }
+    else if (error == 3) {
+        //Fuel filler cap open-loose
+        defaultData[arrGear][3] = (char)0x40;
+    }
+    else if (error == 4) {
+        //Engine System Servcie urgent red
+        defaultData[arrGear][3] = (char)0x80;
+    }
+    else if (error == 5) {
+        //Engine System Servcie Urgent red light
+        defaultData[arrGear][3] = (char)0x90;
+    }
+    else if (error == 6) {
+        //reduced brake performance red light
+        defaultData[arrGear][3] = (char)0xAA;
+    }
+    else if (error == 7) {
+        //reduced engine performance red light
+        defaultData[arrGear][3] = (char)0xBB;
+    }
+    else if (error == 8) {
+        //slow down or shift up orange
+        defaultData[arrGear][3] = (char)0x01;
+    }
+    else if (error == 9) {
+        //reduced engine performance orange light
+        defaultData[arrGear][3] = (char)0x0E;
+    }
+    else if (error == 9) {
+        //slow down or shift up red
+        defaultData[arrGear][3] = (char)0xDD;
+    }
+}
+
+void VolvoDIM::engineServiceRequiredOrange(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0x10;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::reducedBrakePerformanceOrange(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0x30;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::fuelFillerCapLoose(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0x40;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::engineSystemServiceUrgentRed(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0x90;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::brakePerformanceReducedRed(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0xAA;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::reducedEnginePerformanceRed(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0xBB;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::slowDownOrShiftUpOrange(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0x01;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+void VolvoDIM::reducedEnginePerformanceOrange(int on) {
+    if (on == 1) {
+        defaultData[arrGear][3] = (char)0x0E;
+    }
+    else {
+        defaultData[arrGear][3] = (char)0x00;
+    }
+}
+
 void VolvoDIM::gaugeReset(){
     powerOn();
     delay(7000);
