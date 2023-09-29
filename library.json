@@ -1,7 +1,7 @@
 {
     "name": "VolvoDIMLib",
     "keywords": "volvo, dim, cluster",
-    "description": "Volvo DIM library to control volvo instrument clusters",
+    "description": "Volvo DIM library to control Volvo instrument clusters",
     "repository":
     {
       "type": "git",
@@ -13,8 +13,8 @@
         "email": "contact@agabler.com",
         "maintainer": true
     },
-    "liscense": "GPL-3.0-or-later",
-    "version": "1.0.2",
+    "license": "GPL-3.0-or-later",
+    "version": "1.1.1",
     "frameworks": "arduino",
     "platforms": "*",
     "dependencies":

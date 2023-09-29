@@ -19,6 +19,7 @@ void setup() {
   VolvoDIM.setTotalBrightness(256); //This sets both of the above brightness's 0 - 256
   VolvoDIM.setLeftBlinker(1); //This enables the left blinker
   VolvoDIM.setRightBlinker(1); //This enables the right blinker
+  VolvoDIM.setGearText('p'); //This sets the gear to park
 }
 
 void loop() {

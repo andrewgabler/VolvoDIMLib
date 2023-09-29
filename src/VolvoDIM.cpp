@@ -18,14 +18,15 @@ VolvoDIM::VolvoDIM(int SPI_CS_PIN, int relayPin)
 bool enableSerialErrMsg = false;
 int genCnt = 0;
 int cnt = 0;
-int listLen = 10;
+const int listLen = 12;
 int carConCnt = 0;
 int configCnt = 0;
 int blinkerInterval = 0;
 bool leftBlinker = false, rightBlinker = false, solidState = false;
 unsigned char stmp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long address;
-unsigned long addrLi[10] = {0x217FFC, 0x2803008, 0x3C01428, 0x381526C, 0x3600008, 0xA10408, 0x2006428, 0x1A0600A, 0x2616CFC, 0x1017FFC};
+int arrSpeed = 0, arrRpm = 1, arrCoolant = 2, arrTime = 3, arrBrakes = 4, arrBlinker = 5, arrAntiSkid = 6, arrAirbag = 7, arr4c = 8, arrConfig = 9, arrGear = 10, arrTrailer = 11;
+unsigned long addrLi[listLen] = {0x217FFC, 0x2803008, 0x3C01428, 0x381526C, 0x3600008, 0xA10408, 0x2006428, 0x1A0600A, 0x2616CFC, 0x1017FFC, 0x3200408, 0x3E0004A};
 /*
    addrLi[0] = Speed/KeepAlive
    addrLi[1] = RPM/Backlights
@@ -37,9 +38,11 @@ unsigned long addrLi[10] = {0x217FFC, 0x2803008, 0x3C01428, 0x381526C, 0x3600008
    addrLi[7] = Aibag Light
    addrLi[8] = 4C Error
    addrLi[9] = Car Config
+   addrLi[10] = Gear Pos
+   addrLi[11] = Trailer Attached
 */
 
-unsigned char defaultData[10][8] = {
+unsigned char defaultData[listLen][8] = {
   {0x01, 0x4B, 0x00, 0xD8, 0xF0, 0x58, 0x00, 0x00}, //0, Speed/KeepAlive , 0x217FFC
   {0xFF, 0xE1, 0xFF, 0x3F, 0xFF, 0xCF, 0x00, 0x00}, //1, RPM/Backlights , 0x2803008
   {0xC0, 0x80, 0x51, 0x89, 0x0E, 0x00, 0x00, 0x00}, //2, Coolant/OutdoorTemp , 0x3C01428
@@ -49,7 +52,9 @@ unsigned char defaultData[10][8] = {
   {0x01, 0xE3, 0xE0, 0x00, 0x00, 0x00, 0x00, 0x00}, //6, Anti-Skid , 0x2006428
   {0x00, 0x00, 0x00, 0x00, 0x00, 0xBE, 0x49, 0x00}, //7, Aibag Light , 0x1A0600A
   {0x0B, 0x42, 0x00, 0x00, 0xFD, 0x1F, 0x00, 0xFF}, //8, 4C keep alive / prevent error , 0x2616CFC
-  {0x01, 0x0F, 0xF7, 0xFA, 0x00, 0x00, 0x00, 0xC0}  //9, Car Config default , 0x1017FFC
+  {0x01, 0x0F, 0xF7, 0xFA, 0x00, 0x00, 0x00, 0xC0}, //9, Car Config default , 0x1017FFC
+  {0x11, 0xDE, 0x53, 0x10, 0x24, 0x00, 0x10, 0x00}, //10 Gear Postion , 0x3200408
+  {0x00, 0x00, 0x00, 0x00, 0x1D, 0xE0, 0x00, 0x00}  //11 Trailer Attatched , 0x3E0004A
 };
 
 //Sets the data for what the car is equiped with.
@@ -81,14 +86,14 @@ void VolvoDIM::initSRS()
     unsigned long tempAddr = 0x1A0600A;
     sendMsgWrapper(tempAddr, 1, 8, temp);
     delay(15);
-    temp[0] = 0x0;
+    temp[0] = (char)0x0;
     sendMsgWrapper(tempAddr, 1, 8, temp);
     delay(15);
-    temp[0] = 0xC0;
-    temp[6] = 0xC9;
+    temp[0] = (char)0xC0;
+    temp[6] = (char)0xC9;
     sendMsgWrapper(tempAddr, 1, 8, temp);
     delay(15);
-    temp[0] = 0x80;
+    temp[0] = (char)0x80;
     sendMsgWrapper(tempAddr, 1, 8, temp);
 }
 void VolvoDIM::genSRS(long address, byte stmp[])
@@ -120,10 +125,10 @@ void VolvoDIM::init4C()
     delay(15);
     sendMsgWrapper(0x2616CFC, 1, 8, temp);
     delay(15);
-    temp[0] = 0x0B;
+    temp[0] = (char)0x0B;
     sendMsgWrapper(0x2616CFC, 1, 8, temp);
     delay(15);
-    temp[0] = 0x0B;
+    temp[0] = (char)0x0B;
     sendMsgWrapper(0x2616CFC, 1, 8, temp);
 }
 void VolvoDIM::genCC(long address, byte stmp[])
@@ -208,21 +213,21 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
         int prevState = 0;
         if (leftBlinker && rightBlinker)
         {
-            if (defaultData[5][7] == 0x0E)
+            if (defaultData[arrBlinker][7] == 0x0E)
             {
-                defaultData[5][7] = 0x08;
+                defaultData[arrBlinker][7] = (char)0x08;
             }
             else
             {
-                defaultData[5][7] = 0x0E;
+                defaultData[arrBlinker][7] = (char)0x0E;
             }
-            stmp[7] = defaultData[5][7];
+            stmp[7] = defaultData[arrBlinker][7];
             sendMsgWrapper(address, 1, 8, stmp);
             delay(15);
         }
-        else
+        else if(!solidState)
         {
-            if (defaultData[5][7] == 0x0A || defaultData[5][7] == 0x0C)
+            if (defaultData[arrBlinker][7] == 0x0A || defaultData[arrBlinker][7] == 0x0C)
             {
                 prevState = 1;
             }
@@ -231,13 +236,13 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
             {
                 if (prevState == 1)
                 {
-                    defaultData[5][7] = 0x08;
+                    defaultData[arrBlinker][7] = (char)0x08;
                 }
                 else
                 {
-                    defaultData[5][7] = 0x0A;
+                    defaultData[arrBlinker][7] = (char)0x0A;
                 }
-                stmp[7] = defaultData[5][7];
+                stmp[7] = defaultData[arrBlinker][7];
                 sendMsgWrapper(address, 1, 8, stmp);
                 delay(15);
             }
@@ -246,13 +251,13 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
             {
                 if (prevState == 1)
                 {
-                    defaultData[5][7] = 0x08;
+                    defaultData[arrBlinker][7] = (char)0x08;
                 }
                 else
                 {
-                    defaultData[5][7] = 0x0C;
+                    defaultData[arrBlinker][7] = (char)0x0C;
                 }
-                stmp[7] = defaultData[5][7];
+                stmp[7] = defaultData[arrBlinker][7];
                 sendMsgWrapper(address, 1, 8, stmp);
                 delay(15);
             }
@@ -262,16 +267,16 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
     {
         if (leftBlinker)
         {
-            defaultData[5][7] = 0x0A;
-            stmp[7] = defaultData[5][7];
-            CAN.sendMsgBuf(address, 1, 8, stmp);
+            defaultData[arrBlinker][7] = (char)0x0A;
+            stmp[7] = defaultData[arrBlinker][7];
+            sendMsgWrapper(address, 1, 8, stmp);
             delay(15);
         }
         if (rightBlinker)
         {
-            defaultData[5][7] = 0x0C;
-            stmp[7] = defaultData[5][7];
-            CAN.sendMsgBuf(address, 1, 8, stmp);
+            defaultData[arrBlinker][7] = (char)0x0C;
+            stmp[7] = defaultData[arrBlinker][7];
+            sendMsgWrapper(address, 1, 8, stmp);
             delay(15);
         }
     }
@@ -368,8 +373,8 @@ void VolvoDIM::setTime(int inputTime)
             }
         }
         int b5 = inputTime - (b4 * 256);
-        defaultData[3][4] = b4;
-        defaultData[3][5] = b5;
+        defaultData[arrTime][4] = b4;
+        defaultData[arrTime][5] = b5;
     }
     else
     {
@@ -414,18 +419,18 @@ void VolvoDIM::setOutdoorTemp(int oTemp)
     {
         if (oTemp > -50 && oTemp <= 32)
         {
-            defaultData[2][4] = 0x0D;
-            defaultData[2][5] = ceil((oTemp + 83) * 2.21);
+            defaultData[arrCoolant][4] = (char)0x0D;
+            defaultData[arrCoolant][5] = ceil((oTemp + 83) * 2.21);
         }
         else if (oTemp > 32 && oTemp <= 146)
         {
-            defaultData[2][4] = 0x0E;
-            defaultData[2][5] = ceil((oTemp - 33) * 2.25);
+            defaultData[arrCoolant][4] = (char)0x0E;
+            defaultData[arrCoolant][5] = ceil((oTemp - 33) * 2.25);
         }
         else if (oTemp > 146 && oTemp < 177)
         {
-            defaultData[2][4] = 0x0F;
-            defaultData[2][5] = ceil((oTemp - 147) * 2.20);
+            defaultData[arrCoolant][4] = (char)0x0F;
+            defaultData[arrCoolant][5] = ceil((oTemp - 147) * 2.20);
         }
     }
     else
@@ -439,13 +444,13 @@ void VolvoDIM::setCoolantTemp(int range)
 {
     if (range >= 0 && range <= 55)
     {
-        defaultData[2][3] = range + 88;
+        defaultData[arrCoolant][3] = range + 88;
     }
     else if (range > 55 && range <= 100)
     {
         //upper limit scales very slowly.
         //This calculation makes it fit the 0-100 scale much better.
-        defaultData[2][3] = ceil((range - 55) * .333) + 173;
+        defaultData[arrCoolant][3] = ceil((range - 55) * .333) + 173;
     }
     else
     {
@@ -460,23 +465,23 @@ void VolvoDIM::setSpeed(int carSpeed)
     {
         if (carSpeed >= 0 && carSpeed <= 40)
         {
-            defaultData[0][5] = 0x58;
-            defaultData[0][6] = round(carSpeed * 6.375);
+            defaultData[arrSpeed][5] = (char)0x58;
+            defaultData[arrSpeed][6] = round(carSpeed * 6.375);
         }
         else if (carSpeed > 40 && carSpeed <= 80)
         {
-            defaultData[0][5] = 0x59;
-            defaultData[0][6] = round(carSpeed * 6.375);
+            defaultData[arrSpeed][5] = (char)0x59;
+            defaultData[arrSpeed][6] = round(carSpeed * 6.375);
         }
         else if (carSpeed > 80 && carSpeed <= 120)
         {
-            defaultData[0][5] = 0x5A;
-            defaultData[0][6] = round(carSpeed * 6.375);
+            defaultData[arrSpeed][5] = (char)0x5A;
+            defaultData[arrSpeed][6] = round(carSpeed * 6.375);
         }
         else if (carSpeed > 120 && carSpeed <= 160)
         {
-            defaultData[0][5] = 0x5B;
-            defaultData[0][6] = round(carSpeed * 6.375);
+            defaultData[arrSpeed][5] = (char)0x5B;
+            defaultData[arrSpeed][6] = round(carSpeed * 6.375);
         }
     }
     else
@@ -490,8 +495,8 @@ void VolvoDIM::setGasLevel(int level)
 {
     if (level >= 0 && level <= 100)
     {
-        defaultData[3][6] = round(level * .64);
-        defaultData[3][7] = round(level * .64);
+        defaultData[arrTime][6] = round(level * .64);
+        defaultData[arrTime][7] = round(level * .64);
     }
     else
     {
@@ -504,7 +509,7 @@ void VolvoDIM::setRpm(int rpm)
 {
     if (rpm > 501 && rpm <= 8000)
     {
-        defaultData[1][6] = floor((rpm * .031875) / 32) * 32 + floor((rpm * .031875) / 8);
+        defaultData[arrRpm][6] = floor((rpm * .031875) / 32) * 32 + floor((rpm * .031875) / 8);
     }
     else
     {
@@ -517,10 +522,13 @@ void VolvoDIM::setOverheadBrightness(int value)
 {
     if (value >= 0 && value <= 256)
     {
-        if(value == 256){
-            value = 255;
+        int val = 0x00;
+        if(value > 250){
+            val = 0x3f;
+        } else {
+            val = round(value / 32);
         }
-        defaultData[1][2] = value;
+        defaultData[arrRpm][2] = val;
     }
     else
     {
@@ -536,7 +544,7 @@ void VolvoDIM::setLcdBrightness(int value)
         if(value == 256){
             value = 255;
         }
-        defaultData[1][4] = round(value / 32);
+        defaultData[arrRpm][4] = round(value / 32);
     }
     else
     {
@@ -566,11 +574,11 @@ void VolvoDIM::setLeftBlinker(bool state)
 {
     if (state)
     {
-        defaultData[5][7] = 0x0A;
+        defaultData[arrBlinker][7] = (char)0x0A;
     }
     else
     {
-        defaultData[5][7] = 0x0;
+        defaultData[arrBlinker][7] = (char)0x0;
     }
 
     leftBlinker = state;
@@ -579,11 +587,11 @@ void VolvoDIM::setRightBlinker(bool state)
 {
     if (state)
     {
-        defaultData[5][7] = 0x0C;
+        defaultData[arrBlinker][7] = (char)0x0C;
     }
     else
     {
-        defaultData[5][7] = 0x0;
+        defaultData[arrBlinker][7] = (char)0x0;
     }
     rightBlinker = state;
 }
@@ -596,6 +604,112 @@ void VolvoDIM::setRightBlinkerSolid(bool state)
 {
     solidState = state;
     rightBlinker = state;
+}
+
+void VolvoDIM::setGearPosText(const char* gear) {
+  if (gear == 'low' || gear == 'Low' || gear == 'l' || gear == 'L') {
+    defaultData[arrGear][4] = (char)0x40;
+    defaultData[arrGear][6] = (char)0x96;
+    // Gear L (low?)
+} else if (gear == 'park' || gear == 'Park' || gear == 'p' || gear == 'P') {
+    defaultData[arrGear][4] = (char)0x24;
+    defaultData[arrGear][6] = (char)0x10;
+    // Park
+} else if (gear == 'reverse' || gear == 'Reverse' || gear == 'r' || gear == 'R') {
+    defaultData[arrGear][4] = (char)0xE4;
+    defaultData[arrGear][6] = (char)0x20;
+    // Reverse
+} else if (gear == 'Neutral' || gear == 'neutral' || gear == 'N' || gear == 'n') {
+    defaultData[arrGear][4] = (char)0x24;
+    defaultData[arrGear][6] = (char)0x30;
+    // Neutral
+} else if (gear == '1' || gear == 'one' || gear == 'One') {
+    defaultData[arrGear][4] = (char)0x34;
+    defaultData[arrGear][6] = (char)0x40;
+    // 1st Gear
+} else if (gear == '2'|| gear == 'two' || gear == 'Two') {
+    defaultData[arrGear][4] = (char)0x40;
+    defaultData[arrGear][6] = (char)0x70;
+    // 2nd Gear
+} else if (gear == '3'|| gear == 'three' || gear == 'Three') {
+    defaultData[arrGear][4] = (char)0x40;
+    defaultData[arrGear][6] = (char)0x60;
+    // 3rd Gear
+} else if (gear == '4'|| gear == 'four' || gear == 'Four') {
+    defaultData[arrGear][4] = (char)0x44;
+    defaultData[arrGear][6] = (char)0x50;
+    // 4th Gear
+} else if (gear == '5'|| gear == 'five' || gear == 'Five') {
+    defaultData[arrGear][4] = (char)0xBE;
+    defaultData[arrGear][6] = (char)0x00;
+    // 5th Gear
+} else if (gear == '6'|| gear == 'six' || gear == 'Six') {
+    defaultData[arrGear][4] = (char)0xD5;
+    defaultData[arrGear][6] = (char)0x00;
+    // 6th Gear
+} else {
+    defaultData[arrGear][4] = (char)0x10;
+    defaultData[arrGear][6] = (char)0x40;
+    // Nothing Displayed
+}
+}
+void VolvoDIM::setGearPosInt(int gear){
+  //Don't know what to do with the automatic gears for an integer assignment so we'll use negatives
+  switch(gear){
+    case -4:
+      defaultData[arrGear][4] = (char)0x40;
+      defaultData[arrGear][6] = (char)0x96;
+      break; //Gear L (low?)
+    case -3:
+      defaultData[arrGear][4] = (char)0x24;
+      defaultData[arrGear][6] = (char)0x10;
+      break; //Park
+    case -2:
+      defaultData[arrGear][4] = (char)0xE4;
+      defaultData[arrGear][6] = (char)0x20;
+      break; //reverse
+    case -1:
+      defaultData[arrGear][4] = (char)0x10;
+      defaultData[arrGear][6] = (char)0x40;
+      break; //Nothing Displayed
+    case 0:
+      defaultData[arrGear][4] = (char)0x24;
+      defaultData[arrGear][6] = (char)0x30;
+      break; //Neutral
+    case 1:
+      defaultData[arrGear][4] = (char)0x34;
+      defaultData[arrGear][6] = (char)0x40;
+      break; //1st Gear
+    case 2: 
+      defaultData[arrGear][4] = (char)0x40;
+      defaultData[arrGear][6] = (char)0x70;
+      break; //2nd Gear
+    case 3: 
+      defaultData[arrGear][4] = (char)0x40;
+      defaultData[arrGear][6] = (char)0x60;
+      break; //3rd Gear
+    case 4:
+      defaultData[arrGear][4] = (char)0x44;
+      defaultData[arrGear][6] = (char)0x50;
+      break; //4th Gear
+    case 5:
+      defaultData[arrGear][4] = (char)0xBE;
+      defaultData[arrGear][6] = (char)0x00;
+      break; //5th Gear
+    case 6:
+      defaultData[arrGear][4] = (char)0xD5;
+      defaultData[arrGear][6] = (char)0x00;
+      break; //6th Gear
+  }
+}
+void VolvoDIM::enableTrailer(bool enabled){
+  if(enabled){
+      defaultData[arrTrailer][4] = (char)0x11;
+      defaultData[arrTrailer][5] = (char)0xE4;
+    } else {
+      defaultData[arrTrailer][4] = (char)0x1D;
+      defaultData[arrTrailer][5] = (char)0xE0;
+    }
 }
 void VolvoDIM::gaugeReset(){
     powerOn();

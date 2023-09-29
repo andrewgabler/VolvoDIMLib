@@ -21,6 +21,9 @@ setLeftBlinker  KEYWORD2
 setRightBlinker	KEYWORD2
 setLeftBlinkerSolid KEYWORD2
 setRightBlinkerSolid    KEYWORD2
+setGearPosText KEYWORD2
+setGearPosInt    KEYWORD2
+enableTrailer   KEYWORD2
 init	KEYWORD2
 simulate	KEYWORD2
 powerOff	KEYWORD2

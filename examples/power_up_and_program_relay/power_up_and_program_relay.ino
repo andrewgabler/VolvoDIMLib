@@ -22,6 +22,7 @@ void setup() {
   VolvoDIM.setRightBlinker(1); //This enables the right blinker
   //VolvoDIM.powerOff(); //This cuts power to the dim (only works if using a relay)
   //VolvoDIM.powerOn(); //This powers on the dim (only works if using a relay)
+  VolvoDIM.setGearText('p'); //This sets the gear to park
 }
 
 void loop() {
