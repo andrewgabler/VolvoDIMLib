@@ -27,8 +27,8 @@ class VolvoDIM
         void setTotalBrightness(int value);
         void setLeftBlinker(bool state);
         void setRightBlinker(bool state);
-        void setLeftBlinkerSolid(bool state);
-        void setRightBlinkerSolid(bool state);
+        void setLeftBlinkerSolid(int state);
+        void setRightBlinkerSolid(int state);
         void setGearPosText(const char* gear);
         void setGearPosInt(int gear);
         void enableTrailer(bool enabled);
