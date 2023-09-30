@@ -25,13 +25,13 @@ class VolvoDIM
         void setOverheadBrightness(int value);
         void setLcdBrightness(int value);
         void setTotalBrightness(int value);
-        void setLeftBlinker(bool state);
-        void setRightBlinker(bool state);
+        void setLeftBlinker(int state);
+        void setRightBlinker(int state);
         void setLeftBlinkerSolid(int state);
         void setRightBlinkerSolid(int state);
         void setGearPosText(const char* gear);
         void setGearPosInt(int gear);
-        void enableTrailer(bool enabled);
+        void enableTrailer(int enabled);
         void setError(int error);
         void engineServiceRequiredOrange(int on);
         void reducedBrakePerformanceOrange(int on);
