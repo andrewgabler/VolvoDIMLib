@@ -42,7 +42,6 @@ class VolvoDIM
         void slowDownOrShiftUpOrange(int on);
         void reducedEnginePerformanceOrange(int on);
         void setCustomText(const char* text);
-        void clearCustomText();
         void init();
         void simulate();
         void powerOff();
@@ -60,5 +59,7 @@ class VolvoDIM
         void genCC(long address, byte stmp[]);
         void genTemp(long address, byte stmp[]);
         void genBlinking(long address, byte stmp[], bool isBlinking, int interval, int blinkSpeed);
+        void genCustomText(const char* text);
+        void clearCustomText();
 };
 #endif

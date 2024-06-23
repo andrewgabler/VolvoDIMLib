@@ -18,6 +18,7 @@ bool enableSerialErrMsg = false;
 int genCnt = 0;
 int cnt = 0;
 constexpr int listLen = 14;
+char* customTextMessage = "";
 int carConCnt = 0;
 int configCnt = 0;
 int blinkerInterval = 0;
@@ -358,7 +359,10 @@ void VolvoDIM::simulate()
 			sendMsgWrapper(address, stmp);
 		}
 	case addrLi[arrDmMessage]:
-		// Do nothing this is all handeled in the function call
+		if (strlen(customTextMessage) > 0)
+		{
+			genCustomText(customTextMessage);
+		}
 	default:
 		sendMsgWrapper(address, stmp);
 		// delay(15); // send data per 15ms
@@ -933,6 +937,9 @@ void VolvoDIM::reducedEnginePerformanceOrange(int on)
 }
 
 void VolvoDIM::setCustomText(const char* text) {
+	customTextMessage = text;
+}
+void VolvoDIM::genCustomText(const char* text) {
     const int messageLen = strlen(text);
     const int totalMessageLength = 32;
     const int chunkSize = 7;

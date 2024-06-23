@@ -23,7 +23,7 @@ void setup() {
   VolvoDIM.enableTrailer(true); //This enables the blinker function that tells you your trailer is signaling in your car.
   VolvoDIM.reducedEnginePerformanceOrange(false);
   VolvoDIM.reducedBrakePerformanceOrange(false);
-  VolvoDIM.setCustomText("Test display    text");
+  VolvoDIM.setCustomText("Enter your text here");
 }
 
 void loop() {
