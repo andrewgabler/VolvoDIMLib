@@ -19,6 +19,7 @@ int genCnt = 0;
 int cnt = 0;
 constexpr int listLen = 14;
 char* customTextMessage = "";
+int customMessageCnt = 0;
 int carConCnt = 0;
 int configCnt = 0;
 int blinkerInterval = 0;
@@ -359,8 +360,7 @@ void VolvoDIM::simulate()
 			sendMsgWrapper(address, stmp);
 		}
 	case addrLi[arrDmMessage]:
-		if (strlen(customTextMessage) > 0)
-		{
+		if(customMessageCnt < 5){
 			genCustomText(customTextMessage);
 		}
 	default:
@@ -938,8 +938,13 @@ void VolvoDIM::reducedEnginePerformanceOrange(int on)
 
 void VolvoDIM::setCustomText(const char* text) {
 	customTextMessage = text;
+	customMessageCnt = 0;
 }
 void VolvoDIM::genCustomText(const char* text) {
+	customMessageCnt++;
+	if(customMessageCnt > 50){
+		customMessageCnt = 0;
+	}
     const int messageLen = strlen(text);
     const int totalMessageLength = 32;
     const int chunkSize = 7;
