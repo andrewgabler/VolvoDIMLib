@@ -41,6 +41,8 @@ class VolvoDIM
         void reducedEnginePerformanceRed(int on);
         void slowDownOrShiftUpOrange(int on);
         void reducedEnginePerformanceOrange(int on);
+        void setCustomText(const char* text);
+        void clearCustomText();
         void init();
         void simulate();
         void powerOff();
@@ -51,7 +53,7 @@ class VolvoDIM
         void disableSerialErrorMessages();
 
     private:
-        void sendMsgWrapper(unsigned long wId, int wExt, int wLen ,unsigned char* wBuf);
+        void sendMsgWrapper(unsigned long wId, unsigned char* wBuf);
         void initSRS();
         void genSRS(long address, byte stmp[]);
         void init4C();
