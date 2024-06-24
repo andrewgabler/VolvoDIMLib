@@ -14,7 +14,7 @@
         "maintainer": true
     },
     "license": "GPL-3.0-or-later",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "frameworks": "arduino",
     "platforms": "*",
     "dependencies":

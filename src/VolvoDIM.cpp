@@ -969,18 +969,22 @@ void VolvoDIM::setCustomText(const char* text) {
 	customTextChanged = 1;
 }
 void VolvoDIM::genCustomText(const char* text) {
-	if(customTextChanged > 1){
+	if(customTextChanged > 0){
 		//hard reset text window
-		text = "                                                    ";
+		text = "                               ";
 		customTextChanged = 0;
 	}
 	customMessageCnt++;
 	if(customMessageCnt > 50){
 		customMessageCnt = 0;
 	}
-    const int messageLen = strlen(text);
+    int messageLen = strlen(text);
     const int totalMessageLength = 32;
     const int chunkSize = 7;
+
+	if (messageLen > totalMessageLength) {
+        messageLen = totalMessageLength;
+    }
 
     memcpy(stmp, defaultData[arrDmWindow], sizeof(stmp));
     defaultData[arrDmWindow][7] = 0x31;
