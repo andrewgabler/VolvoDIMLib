@@ -41,6 +41,8 @@ gaugeReset	KEYWORD2
 sweepGauges KEYWORD2
 enableSerialErrorMessages KEYWORD2
 disableSerialErrorMessages KEYWORD2
+enableMilageTracking KEYWORD2
+enableDisableDingNoise KEYWORD2
 
 ==================================
 CONSTANTS
