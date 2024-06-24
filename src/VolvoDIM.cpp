@@ -20,7 +20,7 @@ int cnt = 0;
 constexpr int listLen = 14;
 char* customTextMessage = "";
 int startUpWait = 20;
-int customMessageCnt = 0;
+int customMessageCnt = 0, customTextChanged = 0;
 int mileageCounter = 0, mileagePace = 0, genSpeed = 0;
 int mileageEnabled = 0;
 int carConCnt = 0;
@@ -966,8 +966,14 @@ void VolvoDIM::reducedEnginePerformanceOrange(int on)
 void VolvoDIM::setCustomText(const char* text) {
 	customTextMessage = text;
 	customMessageCnt = 0;
+	customTextChanged = 1;
 }
 void VolvoDIM::genCustomText(const char* text) {
+	if(customTextChanged > 1){
+		//hard reset text window
+		text = "                                                    ";
+		customTextChanged = 0;
+	}
 	customMessageCnt++;
 	if(customMessageCnt > 50){
 		customMessageCnt = 0;
