@@ -50,6 +50,8 @@ class VolvoDIM
         void sweepGauges();
         void enableSerialErrorMessages();
         void disableSerialErrorMessages();
+        void enableMilageTracking(int on);
+        void enableDisableDingNoise(int on);
 
     private:
         void sendMsgWrapper(unsigned long wId, unsigned char* wBuf);
@@ -61,5 +63,6 @@ class VolvoDIM
         void genBlinking(long address, byte stmp[], bool isBlinking, int interval, int blinkSpeed);
         void genCustomText(const char* text);
         void clearCustomText();
+        void genMileageAndSpeed();
 };
 #endif

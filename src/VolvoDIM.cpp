@@ -19,7 +19,10 @@ int genCnt = 0;
 int cnt = 0;
 constexpr int listLen = 14;
 char* customTextMessage = "";
+int startUpWait = 20;
 int customMessageCnt = 0;
+int mileageCounter = 0, mileagePace = 0, genSpeed = 0;
+int mileageEnabled = 0;
 int carConCnt = 0;
 int configCnt = 0;
 int blinkerInterval = 0;
@@ -46,7 +49,7 @@ constexpr unsigned long addrLi[listLen] = {0x217FFC, 0x2803008, 0x3C01428, 0x381
 */
 
 unsigned char defaultData[listLen][8] = {
-	{0x01, 0x4B, 0x00, 0xD8, 0xF0, 0x58, 0x00, 0x00}, // 0, Speed/KeepAlive , 0x217FFC
+	{0x01, 0xEB, 0x00, 0xD8, 0xF0, 0x58, 0x00, 0x00}, // 0, Speed/KeepAlive , 0x217FFC
 	{0xFF, 0xE1, 0xFF, 0xF0, 0xFF, 0xCF, 0x00, 0x00}, // 1, RPM/Backlights , 0x2803008
 	{0xC0, 0x80, 0x51, 0x89, 0x0E, 0x00, 0x00, 0x00}, // 2, Coolant/OutdoorTemp , 0x3C01428
 	{0x00, 0x01, 0x05, 0xBC, 0x05, 0xA0, 0x40, 0x40}, // 3, Time/GasTank , 0x381526C
@@ -300,6 +303,24 @@ void VolvoDIM::genBlinking(long address, byte stmp[], bool isBlinking, int inter
 		}
 	}
 }
+void VolvoDIM::genMileageAndSpeed()
+{
+	if (mileageEnabled == 1 && startUpWait == 0)
+	{
+		mileagePace += genSpeed;
+		if (mileagePace >= 200)
+		{
+			mileageCounter++;
+			mileagePace -= 200;
+		}
+		defaultData[arrSpeed][7] = mileageCounter;
+		if (mileageCounter > 255)
+		{
+			mileageCounter = 0;
+		}
+	}
+	sendMsgWrapper(addrLi[arrSpeed], defaultData[arrSpeed]);
+}
 void VolvoDIM::powerOn()
 {
 	pinMode(_relayPin, OUTPUT);
@@ -363,6 +384,8 @@ void VolvoDIM::simulate()
 		if(customMessageCnt < 5){
 			genCustomText(customTextMessage);
 		}
+	case addrLi[arrSpeed]:
+		genMileageAndSpeed();
 	default:
 		sendMsgWrapper(address, stmp);
 		// delay(15); // send data per 15ms
@@ -371,6 +394,9 @@ void VolvoDIM::simulate()
 	// Increment counters
 	cnt++;
 	blinkerInterval++;
+	if(startUpWait > 0){
+		startUpWait--;
+	}
 
 	// Reset counters if necessary
 	if (cnt == listLen)
@@ -489,6 +515,7 @@ void VolvoDIM::setCoolantTemp(int range)
 }
 void VolvoDIM::setSpeed(int carSpeed)
 {
+	genSpeed = carSpeed;
 	if (carSpeed >= 0 && carSpeed <= 160)
 	{
 		if (carSpeed >= 0 && carSpeed <= 40)
@@ -980,6 +1007,21 @@ void VolvoDIM::genCustomText(const char* text) {
     sendMsgWrapper(addrLi[arrDmMessage], stmp);
 }
 
+void VolvoDIM::enableMilageTracking(int on){
+	mileageEnabled = on;
+}
+
+
+void VolvoDIM::enableDisableDingNoise(int on){
+	memcpy(stmp, defaultData[arrTime], sizeof(stmp));
+	if(on == 0){
+		stmp[1] = 0x30;
+		sendMsgWrapper(addrLi[arrTime], stmp);
+	} else if (on == 1){
+		stmp[1] = 0x18;
+		sendMsgWrapper(addrLi[arrTime], stmp);
+	}
+}
 
 void VolvoDIM::clearCustomText()
 {

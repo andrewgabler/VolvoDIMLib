@@ -8,10 +8,11 @@ void setup() {
   VolvoDIM.init(); //This will power your dim with the default values
   int timeValue = VolvoDIM.clockToDecimal(3,45,1); //This converts a 12 hour time into a number suitable for setting the clock 
   //The format for the function above is hour, minute, am = 0, pm = 1
+  VolvoDIM.enableMilageTracking(0); // Enables adding miles to your trip counter and odometer
   VolvoDIM.setTime(timeValue); //This sets the time on the dim
   VolvoDIM.setOutdoorTemp(63); //This accepts a temperature in fahrenheit -49 - 176 and sets it
   VolvoDIM.setCoolantTemp(67); //This sets the coolant gauge 0 - 100 
-  VolvoDIM.setSpeed(105); //This sets the spedometer in mph 0-160
+  VolvoDIM.setSpeed(160); //This sets the spedometer in mph 0-160
   VolvoDIM.setGasLevel(58); //This sets the gas guage 0 - 100
   VolvoDIM.setRpm(5234); //This sets the tachometer 0 - 8000
   VolvoDIM.setOverheadBrightness(255); //This sets the overhead light brightness 0 - 256
@@ -24,6 +25,7 @@ void setup() {
   VolvoDIM.reducedEnginePerformanceOrange(false);
   VolvoDIM.reducedBrakePerformanceOrange(false);
   VolvoDIM.setCustomText("123456789 123456123456789 123456");
+  VolvoDIM.enableDisableDingNoise(0);
 }
 
 void loop() {
